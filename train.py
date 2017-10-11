@@ -21,7 +21,7 @@ tf.flags.DEFINE_float("dev_sample_percentage", .1, "Percentage of the training d
 tf.flags.DEFINE_boolean("enable_word_embeddings", True, "Enable/disable the word embedding (default: True)")
 tf.flags.DEFINE_integer("embedding_dim", 25, "Dimensionality of character embedding (default: 128)")
 tf.flags.DEFINE_string("filter_sizes", "3,4,5", "Comma-separated filter sizes (default: '3,4,5')")
-tf.flags.DEFINE_integer("num_filters", 64, "Number of filters per filter size (default: 128)")
+tf.flags.DEFINE_integer("num_filters", 128, "Number of filters per filter size (default: 128)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
 tf.flags.DEFINE_float("l2_reg_lambda", 0.0, "L2 regularization lambda (default: 0.0)")
 
@@ -46,56 +46,64 @@ print("")
 with open("config.yml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
 
-dataset_name = cfg["datasets"]["default"]
 if FLAGS.enable_word_embeddings and cfg['word_embeddings']['default'] is not None:
     embedding_name = cfg['word_embeddings']['default']
     embedding_dimension = cfg['word_embeddings'][embedding_name]['dimension']
 else:
     embedding_dimension = FLAGS.embedding_dim
 
+train1 = "/home/sheep/bigdata/classification/originnewsdata/1.train"
+train2 = "/home/sheep/bigdata/classification/originnewsdata/2.train"
+train3 = "/home/sheep/bigdata/classification/originnewsdata/3.train"
+train4 = "/home/sheep/bigdata/classification/originnewsdata/4.train"
+train5 = "/home/sheep/bigdata/classification/originnewsdata/5.train"
+
+test1 = "/home/sheep/bigdata/classification/originnewsdata/1.test"
+test2 = "/home/sheep/bigdata/classification/originnewsdata/2.test"
+test3 = "/home/sheep/bigdata/classification/originnewsdata/3.test"
+test4 = "/home/sheep/bigdata/classification/originnewsdata/4.test"
+test5 = "/home/sheep/bigdata/classification/originnewsdata/5.test"
+
+
 # Data Preparation
 # ==================================================
 
 # Load data
 print("Loading data...")
-datasets = None
-if dataset_name == "textinline":
-    datasets = data_helpers.get_datasets_textinline(cfg["datasets"][dataset_name]["business_data_file"]["path"],
-                                                    cfg["datasets"][dataset_name]["enter_data_file"]["path"],
-                                                    cfg["datasets"][dataset_name]["politics_data_file"]["path"],
-                                                    cfg["datasets"][dataset_name]["sport_data_file"]["path"],
-                                                    cfg["datasets"][dataset_name]["tech_data_file"]["path"])
-elif dataset_name == "20newsgroup":
-    datasets = data_helpers.get_datasets_20newsgroup(subset="train",
-                                                     categories=cfg["datasets"][dataset_name]["categories"],
-                                                     shuffle=cfg["datasets"][dataset_name]["shuffle"],
-                                                     random_state=cfg["datasets"][dataset_name]["random_state"])
-elif dataset_name == "localdata":
-    datasets = data_helpers.get_datasets_localdata(container_path=cfg["datasets"][dataset_name]["container_path"],
-                                                     categories=cfg["datasets"][dataset_name]["categories"],
-                                                     shuffle=cfg["datasets"][dataset_name]["shuffle"],
-                                                     random_state=cfg["datasets"][dataset_name]["random_state"])
-x_text, y = data_helpers.load_data_labels(datasets)
+datasets = data_helpers.get_datasets_textinline(train1, train2, train3, train4, train5)
+testdatasets = data_helpers.get_datasets_textinline(test1, test2, test3, test4, test5)
 
+
+x_train_ns, y_train_ns = data_helpers.load_data_labels(datasets)
+x_dev_ns, y_dev_ns = data_helpers.load_data_labels(testdatasets)
+x_text = x_train_ns + x_dev_ns
+print (len(x_train_ns))
+print (len(x_dev_ns))
+print (len(x_text))
 # Build vocabulary
 max_document_length = max([len(x.split(" ")) for x in x_text])
 vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length)
-x = np.array(list(vocab_processor.fit_transform(x_text)))
+x_tr = np.array(list(vocab_processor.fit_transform(x_train_ns)))
+x_te = np.array(list(vocab_processor.fit_transform(x_dev_ns)))
 
 # Randomly shuffle data
 np.random.seed(10)
-shuffle_indices = np.random.permutation(np.arange(len(y)))
-x_shuffled = x[shuffle_indices]
-y_shuffled = y[shuffle_indices]
+tr_shuffle_indices = np.random.permutation(np.arange(len(y_train_ns)))
+te_shuffle_indices = np.random.permutation(np.arange(len(y_dev_ns)))
+x_train = x_tr[tr_shuffle_indices]
+y_train = y_train_ns[tr_shuffle_indices]
+x_dev = x_te[te_shuffle_indices]
+y_dev = y_dev_ns[te_shuffle_indices]
 
 # Split train/test set
 # TODO: This is very crude, should use cross-validation
+'''
 dev_sample_index = -1 * int(FLAGS.dev_sample_percentage * float(len(y)))
 x_train, x_dev = x_shuffled[:dev_sample_index], x_shuffled[dev_sample_index:]
 y_train, y_dev = y_shuffled[:dev_sample_index], y_shuffled[dev_sample_index:]
 print("Vocabulary Size: {:d}".format(len(vocab_processor.vocabulary_)))
 print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
-
+'''
 
 # Training
 # ==================================================

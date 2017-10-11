@@ -47,58 +47,28 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             yield shuffled_data[start_index:end_index]
 
 
-def get_datasets_20newsgroup(subset='train', categories=None, shuffle=True, random_state=42):
-    """
-    Retrieve data from 20 newsgroups
-    :param subset: train, test or all
-    :param categories: List of newsgroup name
-    :param shuffle: shuffle the list or not
-    :param random_state: seed integer to shuffle the dataset
-    :return: data and labels of the newsgroup
-    """
-    datasets = fetch_20newsgroups(subset=subset, categories=categories, shuffle=shuffle, random_state=random_state)
-    return datasets
-
-
-def get_datasets_textinline(business_data_file, enter_data_file, politics_data_file, sport_data_file, tech_data_file):
+def get_datasets_textinline(data1, data2, data3, data4, data5):
     """
     Loads textinline data from files, splits the data into words and generates labels.
     Returns split sentences and labels.
     """
     # Load data from files
-    business_examples = list(open(business_data_file, "r").readlines())
-    business_examples = [s.strip() for s in business_examples]
-    enter_examples = list(open(enter_data_file, "r").readlines())
-    enter_examples = [s.strip() for s in enter_examples]
-    politics_examples = list(open(politics_data_file, "r").readlines())
-    politics_examples = [s.strip() for s in politics_examples]
-    sport_examples = list(open(sport_data_file, "r").readlines())
-    sport_examples = [s.strip() for s in sport_examples]
-    tech_examples = list(open(tech_data_file, "r").readlines())
-    tech_examples = [s.strip() for s in tech_examples]
+    examples1 = list(open(data1, "r").readlines())
+    examples1 = [s.strip() for s in examples1]
+    examples2 = list(open(data2, "r").readlines())
+    examples2 = [s.strip() for s in examples2]
+    examples3 = list(open(data3, "r").readlines())
+    examples3 = [s.strip() for s in examples3]
+    examples4 = list(open(data4, "r").readlines())
+    examples4 = [s.strip() for s in examples4]
+    examples5 = list(open(data5, "r").readlines())
+    examples5 = [s.strip() for s in examples5]
 
     datasets = dict()
-    datasets['data'] = business_examples + enter_examples + politics_examples + sport_examples + tech_examples
-    target = [0 for x in business_examples] + [1 for x in enter_examples] + [2 for x in politics_examples] + [3 for x in sport_examples] + [4 for x in tech_examples]
+    datasets['data'] = examples1 + examples2 + examples3 + examples4 + examples5
+    target = [0 for x in examples1] + [1 for x in examples2] + [2 for x in examples3] + [3 for x in examples4] + [4 for x in examples5]
     datasets['target'] = target
-    datasets['target_names'] = ['business_examples', 'enter_examples', 'politics_examples', 'sport_examples', 'tech_examples']
-    return datasets
-
-
-def get_datasets_localdata(container_path=None, categories=None, load_content=True,
-                       encoding='utf-8', shuffle=True, random_state=42):
-    """
-    Load text files with categories as subfolder names.
-    Individual samples are assumed to be files stored a two levels folder structure.
-    :param container_path: The path of the container
-    :param categories: List of classes to choose, all classes are chosen by default (if empty or omitted)
-    :param shuffle: shuffle the list or not
-    :param random_state: seed integer to shuffle the dataset
-    :return: data and labels of the dataset
-    """
-    datasets = load_files(container_path=container_path, categories=categories,
-                          load_content=load_content, shuffle=shuffle, encoding=encoding,
-                          random_state=random_state)
+    datasets['target_names'] = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5']
     return datasets
 
 
