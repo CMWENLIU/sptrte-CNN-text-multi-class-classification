@@ -52,17 +52,17 @@ if FLAGS.enable_word_embeddings and cfg['word_embeddings']['default'] is not Non
 else:
     embedding_dimension = FLAGS.embedding_dim
 
-train1 = "/home/sheep/bigdata/classification/originnewsdata/1.train"
-train2 = "/home/sheep/bigdata/classification/originnewsdata/2.train"
-train3 = "/home/sheep/bigdata/classification/originnewsdata/3.train"
-train4 = "/home/sheep/bigdata/classification/originnewsdata/4.train"
-train5 = "/home/sheep/bigdata/classification/originnewsdata/5.train"
+train1 = "/home/xxliu10/bigdata/classification/originnewsdata/1.train"
+train2 = "/home/xxliu10/bigdata/classification/originnewsdata/2.train"
+train3 = "/home/xxliu10/bigdata/classification/originnewsdata/3.train"
+train4 = "/home/xxliu10/bigdata/classification/originnewsdata/4.train"
+train5 = "/home/xxliu10/bigdata/classification/originnewsdata/5.train"
 
-test1 = "/home/sheep/bigdata/classification/originnewsdata/1.test"
-test2 = "/home/sheep/bigdata/classification/originnewsdata/2.test"
-test3 = "/home/sheep/bigdata/classification/originnewsdata/3.test"
-test4 = "/home/sheep/bigdata/classification/originnewsdata/4.test"
-test5 = "/home/sheep/bigdata/classification/originnewsdata/5.test"
+test1 = "/home/xxliu10/bigdata/classification/originnewsdata/1.test"
+test2 = "/home/xxliu10/bigdata/classification/originnewsdata/2.test"
+test3 = "/home/xxliu10/bigdata/classification/originnewsdata/3.test"
+test4 = "/home/xxliu10/bigdata/classification/originnewsdata/4.test"
+test5 = "/home/xxliu10/bigdata/classification/originnewsdata/5.test"
 
 
 # Data Preparation
@@ -141,7 +141,7 @@ with tf.Graph().as_default():
 
         # Output directory for models and summaries
         timestamp = str(int(time.time()))
-        myownpath = '/home/sheep/bigdata/runs/'
+        myownpath = '/home/xxliu10/bigdata/runs'
         out_dir = os.path.abspath(os.path.join(myownpath, timestamp))
         #out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", timestamp))
         print("Writing to {}\n".format(out_dir))

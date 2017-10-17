@@ -7,32 +7,7 @@ word_embeddings:
     dimension: 300
     binary: True
   glove:
-    path: '/home/sheep/bigdata/vec25.txt'
+    path: '/home/xxliu10/bigdata/vec25.txt'
     dimension: 25
     length: 400000
-
-datasets:
-  default: textinline
-  textinline:
-    train_file_1:
-      path: "/home/sheep/bigdata/classification/originnewsdata/1.train"
-    train_file_2:
-      path: "/home/sheep/bigdata/classification/originnewsdata/2.train"
-    train_file_3:
-      path: "/home/sheep/bigdata/classification/originnewsdata/3.train"
-    train_file_4:
-      path: "/home/sheep/bigdata/classification/originnewsdata/4.train"
-    train_file_5:
-      path: "/home/sheep/bigdata/classification/originnewsdata/5.train"
-
-    test_file_1:
-      path: "/home/sheep/bigdata/classification/originnewsdata/1.test"
-    test_file_2:
-      path: "/home/sheep/bigdata/classification/originnewsdata/2.test"
-    test_file_3:
-      path: "/home/sheep/bigdata/classification/originnewsdata/3.test"
-    test_file_4:
-      path: "/home/sheep/bigdata/classification/originnewsdata/4.test"
-    test_file_5:
-      path: "/home/sheep/bigdata/classification/originnewsdata/5.test"
 
